@@ -1,8 +1,9 @@
 import App from './app';
 
+const PORT = process.env.PORT || '5000';
+
 const app = new App(
-    5000
+    parseInt(PORT,10)
 );
 
-app.listen();
-app.database.connect();
+// app.database.connect();

@@ -1,8 +1,8 @@
 import * as express from 'express';
 import EmployeeController from '../controllers/EmployeeController';
-const userRoutes = express.Router();
+const router = express.Router();
 
-userRoutes.get('/fetch', EmployeeController.fetch);
-userRoutes.post('/create', EmployeeController.store);
+router.get('/fetch', EmployeeController.fetch);
+router.post('/create', EmployeeController.store);
 
-export default userRoutes;
+export default router;

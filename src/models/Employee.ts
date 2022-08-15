@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 
 export interface Employee {
-    id: number | null;
+    id: string;
     firstName: string;
     lastName: string;
     email?: string;
