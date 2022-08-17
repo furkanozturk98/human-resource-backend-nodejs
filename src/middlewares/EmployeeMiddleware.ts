@@ -6,10 +6,11 @@ const log: debug.IDebugger = debug('app:employees-controller');
 class employeesMiddleware {
 
     async validateRequiredemployeeBodyFields(req: express.Request, res: express.Response, next: express.NextFunction) {
-        if (req.body && req.body.email && req.body.password) {
+        console.log(req.body);
+        if (req.body && req.body.email && req.body.firstName) {
             next();
         } else {
-            res.status(400).send({error: `Missing required fields email and password`});
+            res.status(400).send({error: `Missing required fields email or first name`});
         }
     }
 

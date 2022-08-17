@@ -1,32 +1,14 @@
 import * as mongoose from 'mongoose';
 
-export interface Employee {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email?: string;
-    phone: string;
-    company_id: number
-}
-
 const schema = new mongoose.Schema({
+    id: String,
     firstName: String,
-    content: String,
-    title: String,
-    class: String
+    lastName: String,
+    email: String,
+    phone: String,
+    company_id: Number
 });
 
-class employee {
+const model = mongoose.model('Employee', schema);
 
-    user = mongoose.model('employee', schema);
-
-    public saveUser(posts, callback) {
-        this.user.create(posts, callback)
-    }
-
-    public fetchUser(id, callback) {
-        this.user.findById(id, callback)
-    }
-}
-
-export default employee;
+export default model;

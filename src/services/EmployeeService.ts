@@ -1,11 +1,14 @@
 import EmployeesDao from '../daos/EmployeeDao';
 import {CRUD} from "../common/interfaces/crud.interface";
-import {Employee} from "../models/Employee";
+import EmployeeInterface from "../interfaces/Employee";
+import Employee from "../models/Employee";
 
 class EmployeeService implements CRUD {
 
-    async create(resource: Employee) {
-        return EmployeesDao.addEmployee(resource);
+    async create(resource: EmployeeInterface) {
+        return Employee.create(resource);
+
+        // return EmployeesDao.addEmployee(resource);
     }
 
     async delete(resourceId: string) {
@@ -20,7 +23,7 @@ class EmployeeService implements CRUD {
         return EmployeesDao.getEmployeeById(resourceId);
     };
 
-    async update(resource: Employee) {
+    async update(resource: EmployeeInterface) {
         return EmployeesDao.putEmployeeById(resource);
     };
 

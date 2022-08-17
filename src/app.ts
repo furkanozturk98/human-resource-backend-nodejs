@@ -1,31 +1,34 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
-import AppRoutes from './routes/index';
+import * as dotenv        from 'dotenv';
 import Database from './config/Database';
 import {CommonRoutesConfig} from './common/routes.config';
+import EmployeesRoutes from "./routes/EmployeeRoutes";
 
 class App {
     public app: express.Application;
     public port: number;
     public routes: Array<CommonRoutesConfig> = [];
 
-    // @ts-ignore
-    appRoutes = new AppRoutes();
-    // public database = new Database();
+    public database = new Database();
 
     constructor(port: number) {
-        // const app = express.default();
-        // this.port = port;
+        // @ts-ignore
+        this.app = express.default();
+        this.port = port;
 
-console.log('a');
-process.exit();
+        dotenv.config();
 
-        // this.initializeMiddlewares();
+        this.initializeMiddlewares();
+
         // this.initializeRouters(this.appRoutes.routers);
     }
 
     private initializeMiddlewares() {
         this.app.use(bodyParser.json());
+
+        let employeesRoutes = new EmployeesRoutes(this.app);
+        employeesRoutes.configureRoutes();
     }
     // Initialize all the routes of the application
     // private initializeRouters(router: ) {

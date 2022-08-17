@@ -6,4 +6,5 @@ const app = new App(
     parseInt(PORT,10)
 );
 
-// app.database.connect();
+app.listen();
+app.database.connect();

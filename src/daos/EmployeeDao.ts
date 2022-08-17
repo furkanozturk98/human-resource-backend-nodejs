@@ -1,14 +1,9 @@
-import {Employee} from "../models/Employee";
-import shortid from "shortid";
+import Employee from "../interfaces/Employee";
+import * as shortid from "shortid";
 import debug from 'debug';
 
 const log: debug.IDebugger = debug('app:in-memory-dao');
 
-/**
- * NEVER employee THIS CLASS IN REAL LIFE.
- * This class was created to ease the explanation of other topics in the corresponding article.
- * For any real-life scenario, consider using an ODM/ORM to manage your own database in a better way.
- */
 class EmployeeDao {
     employees: Array<Employee> = [];
 

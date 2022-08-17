@@ -3,9 +3,9 @@ import EmployeeController from '../controllers/EmployeeController';
 import EmployeeMiddleware from '../middlewares/EmployeeMiddleware';
 import * as express from 'express';
 
-export class employeesRoutes extends CommonRoutesConfig {
+class EmployeesRoutes extends CommonRoutesConfig {
     constructor(app: express.Application) {
-        super(app, 'employeesRoutes');
+        super(app, 'EmployeesRoutes');
     }
 
     configureRoutes() {
@@ -16,13 +16,14 @@ export class employeesRoutes extends CommonRoutesConfig {
                 EmployeeMiddleware.validateSameEmailDoesntExist,
                 EmployeeController.creatEemployee);
 
-        this.app.param(`userId`, EmployeeMiddleware.extractemployeeId);
-        this.app.route(`/employees/:userId`)
+        this.app.param(`employeeId`, EmployeeMiddleware.extractemployeeId);
+
+        this.app.route(`/employees/:employeeId`)
             .all(EmployeeMiddleware.validateemployeeExists)
             .get(EmployeeController.getEmployeeById)
             .delete(EmployeeController.removEemployee);
 
-        this.app.put(`/employees/:userId`,[
+        this.app.put(`/employees/:employeeId`,[
             EmployeeMiddleware.validateRequiredemployeeBodyFields,
             EmployeeMiddleware.validateSameEmailBelongToSameemployee,
             EmployeeController.put
@@ -31,3 +32,5 @@ export class employeesRoutes extends CommonRoutesConfig {
         return this.app;
     }
 }
+
+export default EmployeesRoutes;
