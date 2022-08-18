@@ -22,23 +22,16 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = __importStar(require("mongoose"));
-const mongoose_paginate_1 = __importDefault(require("mongoose-paginate"));
 const schema = new mongoose.Schema({
     id: String,
-    firstName: String,
-    lastName: String,
+    name: String,
     email: String,
-    phone: String,
-    company_id: Number
+    password: String,
 }, {
     versionKey: false
 });
-schema.plugin(mongoose_paginate_1.default);
-const model = mongoose.model('Employee', schema);
+const model = mongoose.model('User', schema);
 exports.default = model;
-//# sourceMappingURL=Employee.js.map
+//# sourceMappingURL=User.js.map

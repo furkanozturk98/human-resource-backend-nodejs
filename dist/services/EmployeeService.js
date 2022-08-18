@@ -15,33 +15,42 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const EmployeeDao_1 = __importDefault(require("../daos/EmployeeDao"));
 const Employee_1 = __importDefault(require("../models/Employee"));
 class EmployeeService {
+    list(limit, page) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return Employee_1.default.paginate({}, {
+                page: page,
+                limit: limit
+            });
+        });
+    }
+    ;
+    show(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return Employee_1.default.findById(id);
+        });
+    }
+    ;
     create(resource) {
         return __awaiter(this, void 0, void 0, function* () {
             return Employee_1.default.create(resource);
-            // return EmployeesDao.addEmployee(resource);
         });
     }
-    delete(resourceId) {
+    update(id, resource) {
         return __awaiter(this, void 0, void 0, function* () {
-            return EmployeeDao_1.default.removeEmployeeById(resourceId);
-        });
-    }
-    ;
-    list(limit, page) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return EmployeeDao_1.default.getemployees();
-        });
-    }
-    ;
-    show(resourceId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return EmployeeDao_1.default.getEmployeeById(resourceId);
+            return Employee_1.default.findByIdAndUpdate(id, resource, { new: true }, function (err, docs) {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    console.log("Updated Employee : ", docs);
+                }
+            });
         });
     }
     ;
-    update(resource) {
+    delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return EmployeeDao_1.default.putEmployeeById(resource);
+            Employee_1.default.findByIdAndDelete(id);
         });
     }
     ;

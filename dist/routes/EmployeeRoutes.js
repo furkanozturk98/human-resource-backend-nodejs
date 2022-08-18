@@ -12,7 +12,7 @@ class EmployeesRoutes extends routes_config_1.CommonRoutesConfig {
     }
     configureRoutes() {
         this.app.route(`/employees`)
-            .get(EmployeeController_1.default.listEmployees)
+            .get(EmployeeController_1.default.list)
             .post(EmployeeMiddleware_1.default.validateRequiredemployeeBodyFields, EmployeeMiddleware_1.default.validateSameEmailDoesntExist, EmployeeController_1.default.creatEemployee);
         this.app.param(`employeeId`, EmployeeMiddleware_1.default.extractemployeeId);
         this.app.route(`/employees/:employeeId`)

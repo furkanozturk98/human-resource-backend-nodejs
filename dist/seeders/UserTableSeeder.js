@@ -35,43 +35,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const EmployeeService_1 = __importDefault(require("../services/EmployeeService"));
 const argon2 = __importStar(require("argon2"));
-const debug_1 = __importDefault(require("debug"));
-const log = (0, debug_1.default)('app:employees-controller');
-class EmployeeController {
-    list(req, res) {
+const User_1 = __importDefault(require("../models/User"));
+class UserTableSeeder {
+    seed() {
         return __awaiter(this, void 0, void 0, function* () {
-            const employees = yield EmployeeService_1.default.list(15, 1);
-            res.status(200).send({ data: employees });
-        });
-    }
-    getEmployeeById(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const employee = yield EmployeeService_1.default.show(req.params.employeeId);
-            res.status(200).send(employee);
-        });
-    }
-    creatEemployee(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // req.body.password = await argon2.hash(req.body.password);
-            const employee = yield EmployeeService_1.default.create(req.body);
-            res.status(201).send();
-        });
-    }
-    put(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            req.body.password = yield argon2.hash(req.body.password);
-            log(yield EmployeeService_1.default.update(req.params.employeeId, req.body));
-            res.status(204).send(``);
-        });
-    }
-    removEemployee(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            log(yield EmployeeService_1.default.delete(req.params.employeeId));
-            res.status(204).send(``);
+            let count = yield User_1.default.where('email')
+                .equals('admin@admin.com')
+                .count();
+            if (count) {
+                return;
+            }
+            yield User_1.default.create({
+                'name': 'Admin',
+                'email': 'admin@admin.com',
+                'password': yield argon2.hash('password')
+            });
         });
     }
 }
-exports.default = new EmployeeController;
-//# sourceMappingURL=EmployeeController.js.map
+exports.default = UserTableSeeder;
+//# sourceMappingURL=UserTableSeeder.js.map
