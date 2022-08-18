@@ -10,7 +10,7 @@ class EmployeesRoutes extends CommonRoutesConfig {
 
     configureRoutes() {
         this.app.route(`/employees`)
-            .get(EmployeeController.listEmployees)
+            .get(EmployeeController.list)
             .post(
                 EmployeeMiddleware.validateRequiredemployeeBodyFields,
                 EmployeeMiddleware.validateSameEmailDoesntExist,

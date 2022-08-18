@@ -1,14 +1,19 @@
 import * as mongoose from 'mongoose';
+import paginate from 'mongoose-paginate-v2';
+import Employee from "../interfaces/Employee";
 
 const schema = new mongoose.Schema({
-    id: String,
     firstName: String,
     lastName: String,
     email: String,
     phone: String,
     company_id: Number
+},{
+    versionKey: false
 });
 
-const model = mongoose.model('Employee', schema);
+schema.plugin(paginate);
+
+const model = mongoose.model<Employee, mongoose.PaginateModel<Employee>>('Employee', schema);
 
 export default model;

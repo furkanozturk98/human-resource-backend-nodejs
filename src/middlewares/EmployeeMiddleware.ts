@@ -1,6 +1,7 @@
 import * as express from 'express';
 import employeeService from '../services/EmployeeService';
 import debug from 'debug';
+import Employee from "../interfaces/Employee";
 
 const log: debug.IDebugger = debug('app:employees-controller');
 class employeesMiddleware {
@@ -16,6 +17,7 @@ class employeesMiddleware {
 
     async validateSameEmailDoesntExist(req: express.Request, res: express.Response, next: express.NextFunction) {
         const employee = await employeeService.getEmployeeByEmail(req.body.email);
+
         if (employee) {
             res.status(400).send({error: `employee email already exists`});
         } else {
@@ -24,7 +26,8 @@ class employeesMiddleware {
     }
 
     async validateSameEmailBelongToSameemployee(req: express.Request, res: express.Response, next: express.NextFunction) {
-        const employee = await employeeService.getEmployeeByEmail(req.body.email);
+        const employee: Employee  = await employeeService.getEmployeeByEmail(req.body.email);
+
         if (employee && employee.id === req.params.employeeId) {
             next();
         } else {

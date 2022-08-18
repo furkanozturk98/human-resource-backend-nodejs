@@ -5,30 +5,52 @@ import Employee from "../models/Employee";
 
 class EmployeeService implements CRUD {
 
+    async list(limit: number, page: number) {
+
+        return await Employee.paginate({}, {
+            page: page,
+            limit: limit,
+            customLabels : {
+                docs: 'data',
+            }
+        });
+    };
+
+    async show(id: string) {
+        return Employee.findById(id);
+
+    };
+
     async create(resource: EmployeeInterface) {
         return Employee.create(resource);
-
-        // return EmployeesDao.addEmployee(resource);
     }
 
-    async delete(resourceId: string) {
-        return EmployeesDao.removeEmployeeById(resourceId);
+    async update(id: string, resource: EmployeeInterface)
+    {
+        try {
+            return await Employee.findByIdAndUpdate(id, resource, {new: true}, function (err, docs) {
+                if (err) {
+                    console.log(err)
+                } else {
+                    console.log("Updated Employee : ", docs);
+                }
+            })
+        }
+        catch (e) {
+            
+        }
     };
 
-    async list(limit: number, page: number) {
-        return EmployeesDao.getemployees();
-    };
-
-    async show(resourceId: string) {
-        return EmployeesDao.getEmployeeById(resourceId);
-    };
-
-    async update(resource: EmployeeInterface) {
-        return EmployeesDao.putEmployeeById(resource);
+    async delete(id: string)
+    {
+        Employee.findByIdAndDelete(id);
     };
 
     async getEmployeeByEmail(email: string) {
-        return EmployeesDao.getEmployeeByEmail(email);
+        let query = Employee.findOne({email: email})
+        await query.clone();
+
+        return query;
     }
 }
 
