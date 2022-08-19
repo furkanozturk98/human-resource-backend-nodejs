@@ -2,9 +2,10 @@ import * as express from 'express';
 import employeeService from '../services/EmployeeService';
 import Employee from "../interfaces/Employee";
 import {logger} from "../services/Logger";
+import App from '../app';
 
-class EmployeesMiddleware {
-
+class EmployeesMiddleware
+{
     /**
      * @param req
      * @param res
@@ -15,10 +16,12 @@ class EmployeesMiddleware {
         if (req.body && req.body.email && req.body.firstName) {
             next();
         } else {
-            logger.info('Missing required fields email or first name');
+            const message = App.localeService.translate('employee_messages_body_fields');
+
+            logger.info(message);
 
             res.status(400).send({
-                error : `Missing required fields email or first name`
+                error : message
             });
         }
     }

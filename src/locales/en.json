@@ -1,0 +1,9 @@
+{
+	"employee": {
+		"messages": {
+			"body_fields": "Missing required fields email or first name"
+		}
+	},
+
+	"employee_messages_body_fields": "Missing required fields email or first name"
+}
