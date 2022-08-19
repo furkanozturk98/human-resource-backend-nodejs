@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 class Database {
 
-    public async connect()
+    public async connect(): Promise<void>
     {
         await mongoose.connect(Database.getConnectionString());
     }

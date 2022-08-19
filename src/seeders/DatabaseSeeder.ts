@@ -12,11 +12,11 @@ export default class DatabaseSeeder
         this.database = new Database();
     }
 
-    async seed()
+    async seed(): Promise<void>
     {
         await this.database.connect();
 
-        let userTableSeeder = new UserTableSeeder();
+        const userTableSeeder = new UserTableSeeder();
         await userTableSeeder.seed();
 
         process.exit();

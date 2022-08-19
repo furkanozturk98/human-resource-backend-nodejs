@@ -6,7 +6,7 @@ export default class UserTableSeeder
 {
     async seed()
     {
-        let count = await User.where('email')
+        const count = await User.where('email')
             .equals('admin@admin.com')
             .count();
 
@@ -15,9 +15,9 @@ export default class UserTableSeeder
         }
 
         await User.create({
-            'name': 'Admin',
-            'email': 'admin@admin.com',
-            'password': await argon2.hash('password')
+            'name'     : 'Admin',
+            'email'    : 'admin@admin.com',
+            'password' : await argon2.hash('password')
         });
     }
 }

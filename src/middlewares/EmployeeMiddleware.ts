@@ -1,64 +1,85 @@
 import * as express from 'express';
 import employeeService from '../services/EmployeeService';
-import debug from 'debug';
 import Employee from "../interfaces/Employee";
+import {logger} from "../services/Logger";
 
-const log: debug.IDebugger = debug('app:employees-controller');
-class employeesMiddleware {
+class EmployeesMiddleware {
 
-    async validateRequiredemployeeBodyFields(req: express.Request, res: express.Response, next: express.NextFunction) {
-        console.log(req.body);
+    /**
+     * @param req
+     * @param res
+     * @param next
+     */
+    async validateRequiredemployeeBodyFields(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void>
+    {
         if (req.body && req.body.email && req.body.firstName) {
             next();
         } else {
-            res.status(400).send({error: `Missing required fields email or first name`});
+            logger.info('Missing required fields email or first name');
+
+            res.status(400).send({
+                error : `Missing required fields email or first name`
+            });
         }
     }
 
-    async validateSameEmailDoesntExist(req: express.Request, res: express.Response, next: express.NextFunction) {
+    /**
+     * @param req
+     * @param res
+     * @param next
+     */
+    async validateSameEmailDoesntExist(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void>
+    {
         const employee = await employeeService.getEmployeeByEmail(req.body.email);
 
         if (employee) {
-            res.status(400).send({error: `employee email already exists`});
+            res.status(400).send({error : `employee email already exists`});
         } else {
             next();
         }
     }
 
-    async validateSameEmailBelongToSameemployee(req: express.Request, res: express.Response, next: express.NextFunction) {
+    /**
+     * @param req
+     * @param res
+     * @param next
+     */
+    async validateSameEmailBelongToSameemployee(req: express.Request, res: express.Response, next: express.NextFunction) : Promise<void>
+    {
         const employee: Employee  = await employeeService.getEmployeeByEmail(req.body.email);
 
-        if (employee && employee.id === req.params.employeeId) {
+        if (employee && employee.id === req.params.id) {
             next();
         } else {
-            res.status(400).send({error: `Invalid email`});
+            res.status(400).send({error : `Invalid email`});
         }
     }
 
-    // Here we need to use an arrow function to bind `this` correctly
-    validatePatchEmail = async(req: express.Request, res: express.Response, next: express.NextFunction) => {
-        if (req.body.email) {
-            log('Validating email', req.body.email);
-
-            this.validateSameEmailBelongToSameemployee(req, res, next);
-        } else {
-            next();
-        }
-    }
-
-    async validateemployeeExists(req: express.Request, res: express.Response, next: express.NextFunction) {
-        const employee = await employeeService.show(req.params.employeeId);
+    /**
+     * @param req
+     * @param res
+     * @param next
+     */
+    async validateemployeeExists(req: express.Request, res: express.Response, next: express.NextFunction) : Promise<void>
+    {
+        const employee = await employeeService.show(req.params.id);
         if (employee) {
             next();
         } else {
-            res.status(404).send({error: `employee ${req.params.employeeId} not found`});
+            res.status(404).send({error : `employee ${req.params.id} not found`});
         }
     }
 
-    async extractemployeeId(req: express.Request, res: express.Response, next: express.NextFunction) {
-        req.body.id = req.params.employeeId;
+    /**
+     * @param req
+     * @param res
+     * @param next
+     */
+    async extractId(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void>
+    {
+        req.body.id = req.params.id;
         next();
     }
 }
 
-export default new employeesMiddleware();
+export default new EmployeesMiddleware();
