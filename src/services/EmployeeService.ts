@@ -1,53 +1,88 @@
-import EmployeesDao from '../daos/EmployeeDao';
 import {CRUD} from "../common/interfaces/crud.interface";
 import EmployeeInterface from "../interfaces/Employee";
 import Employee from "../models/Employee";
+import {logger} from "./Logger";
 
-class EmployeeService implements CRUD {
-
-    async list(limit: number, page: number) {
-
+class EmployeeService implements CRUD
+{
+    /**
+     * @param limit
+     * @param page
+     */
+    async list(limit: number, page: number)
+    {
         return await Employee.paginate({}, {
-            page: page,
-            limit: limit,
+            page         : page,
+            limit        : limit,
             customLabels : {
-                docs: 'data',
+                docs : 'data',
             }
         });
-    };
-
-    async show(id: string) {
-        return Employee.findById(id);
-
-    };
-
-    async create(resource: EmployeeInterface) {
-        return Employee.create(resource);
     }
 
+    /**
+     * @param id
+     */
+    async show(id: string)
+    {
+        return Employee.findById(id);
+    }
+
+    /**
+     * @param resource
+     */
+    async create(resource: EmployeeInterface)
+    {
+        try{
+            await Employee.create(resource);
+            logger.info("Employee Created : ", resource);
+        }
+        catch (e) {
+            logger.error("Error On Creating Employee : ", {
+                error : e
+            });
+        }
+    }
+
+    /**
+     * @param id
+     * @param resource
+     */
     async update(id: string, resource: EmployeeInterface)
     {
         try {
-            return await Employee.findByIdAndUpdate(id, resource, {new: true}, function (err, docs) {
-                if (err) {
-                    console.log(err)
-                } else {
-                    console.log("Updated Employee : ", docs);
-                }
-            })
+            await Employee.findByIdAndUpdate(id, resource, {new : true});
+            logger.info("Employee Updated : ", resource);
         }
         catch (e) {
-            
+            logger.error("Error On Updating Employee : ", {
+                error : e
+            });
         }
-    };
+    }
 
-    async delete(id: string)
+    /**
+     * @param id
+     */
+    async delete(id: string): Promise<void>
     {
-        Employee.findByIdAndDelete(id);
-    };
+        try {
+            await Employee.findByIdAndDelete(id);
+            logger.info("Employee Deleted : ", id);
+        }
+        catch (e) {
+            logger.error("Error On Deleting Employee : ", {
+                error : e
+            });
+        }
+    }
 
-    async getEmployeeByEmail(email: string) {
-        let query = Employee.findOne({email: email})
+    /**
+     * @param email
+     */
+    async getEmployeeByEmail(email: string)
+    {
+        const query = Employee.findOne({email : email})
         await query.clone();
 
         return query;
