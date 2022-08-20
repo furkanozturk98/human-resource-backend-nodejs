@@ -3,6 +3,7 @@ import employeeService from '../services/EmployeeService';
 import Employee from "../interfaces/Employee";
 import {logger} from "../services/Logger";
 import App from '../app';
+import mongoose from "mongoose";
 
 class EmployeesMiddleware
 {
@@ -16,13 +17,7 @@ class EmployeesMiddleware
         if (req.body && req.body.email && req.body.firstName) {
             next();
         } else {
-            const message = App.localeService.translate('employee_messages_body_fields');
-
-            logger.info(message);
-
-            res.status(400).send({
-                error : message
-            });
+            await EmployeesMiddleware.logAndSendResponse(res, 'employee_messages_body_fields')
         }
     }
 
@@ -36,7 +31,7 @@ class EmployeesMiddleware
         const employee = await employeeService.getEmployeeByEmail(req.body.email);
 
         if (employee) {
-            res.status(400).send({error : `employee email already exists`});
+            await EmployeesMiddleware.logAndSendResponse(res, 'employee_messages_email_exists')
         } else {
             next();
         }
@@ -54,7 +49,7 @@ class EmployeesMiddleware
         if (employee && employee.id === req.params.id) {
             next();
         } else {
-            res.status(400).send({error : `Invalid email`});
+            await EmployeesMiddleware.logAndSendResponse(res, 'employee_messages_invalid_email')
         }
     }
 
@@ -69,7 +64,7 @@ class EmployeesMiddleware
         if (employee) {
             next();
         } else {
-            res.status(404).send({error : `employee ${req.params.id} not found`});
+            await EmployeesMiddleware.logAndSendResponse(res, 'employee_not_found')
         }
     }
 
@@ -80,8 +75,29 @@ class EmployeesMiddleware
      */
     async extractId(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void>
     {
-        req.body.id = req.params.id;
+        const id = req.params.id;
+
+        if( !mongoose.Types.ObjectId.isValid(id) ) {
+            await EmployeesMiddleware.logAndSendResponse(res, 'employee_not_found')
+        }
+
+        req.body.id = id;
         next();
+    }
+
+    /**
+     * @param res
+     * @param string
+     */
+    static async logAndSendResponse(res: express.Response, string: string): Promise<void>
+    {
+        const message = App.localeService.translate(string);
+
+        logger.info(message);
+
+        res.status(400).send({
+            error : message
+        });
     }
 }
 
