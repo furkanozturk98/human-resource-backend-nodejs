@@ -5,6 +5,7 @@ import Database from './config/Database';
 import EmployeesRoutes from "./routes/EmployeeRoutes";
 import container from './services/Container';
 import {LocaleService} from "./services/LocaleService";
+import AuthRoutes from "./routes/AuthRoutes";
 
 class App
 {
@@ -21,11 +22,14 @@ class App
 
         dotenv.config();
 
-        this.initializeMiddlewares();
+        this.initializeRoutes();
     }
 
-    private initializeMiddlewares() {
+    private initializeRoutes() {
         this.app.use(bodyParser.json());
+
+        const authRoutes = new AuthRoutes(this.app);
+        authRoutes.configureRoutes();
 
         const employeesRoutes = new EmployeesRoutes(this.app);
         employeesRoutes.configureRoutes();
