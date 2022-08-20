@@ -9,6 +9,12 @@ const app = new App(
 app.listen();
 app.database.connect();
 
+import { generateToken } from './utils/JwtUtil';
+
+// Only generate a token for lower level environments
+if (process.env.APP !== 'production') {
+     generateToken();
+}
 
 // console.log(localeService.getLocales());
 // console.log(localeService.getCurrentLocale());
