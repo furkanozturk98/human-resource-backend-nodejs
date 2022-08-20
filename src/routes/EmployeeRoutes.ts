@@ -2,6 +2,8 @@ import {Routes} from '../common/Routes';
 import EmployeeController from '../controllers/EmployeeController';
 import EmployeeMiddleware from '../middlewares/EmployeeMiddleware';
 import * as express from 'express';
+import * as Auth from '../middlewares/AuthMiddleware';
+import {unless} from "../utils/RouteUtil";
 
 class EmployeesRoutes extends Routes {
     constructor(app: express.Application) {
@@ -10,6 +12,9 @@ class EmployeesRoutes extends Routes {
 
     configureRoutes(): express.Application
     {
+        // this.app.use(Auth.authorize(['employee.manage', 'company.manage']));
+        this.app.use(unless(Auth.authorize(['employee.manage', 'company.manage']), "/login", "/register"));
+
         this.app.route(`/employees`)
             .get(EmployeeController.list)
             .post(
