@@ -51,8 +51,10 @@ class EmployeeService implements CRUD
     async update(id: string, resource: EmployeeInterface)
     {
         try {
-            await Employee.findByIdAndUpdate(id, resource, {new : true});
+            const employee = await Employee.findByIdAndUpdate(id, resource, {new : true});
             logger.info("Employee Updated : ", resource);
+
+            return employee;
         }
         catch (e) {
             logger.error("Error On Updating Employee : ", {
