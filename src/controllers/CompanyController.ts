@@ -45,7 +45,9 @@ class CompanyController
     {
         const data = await CompanyService.update(req.params.id, req.body);
 
-        res.status(204).send(data);
+        res.status(200).send({
+            data
+        });
     }
 
     /**

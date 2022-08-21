@@ -45,7 +45,9 @@ class EmployeeController
     {
         const data = await EmployeeService.update(req.params.id, req.body);
 
-        res.status(204).send(data);
+        res.status(200).send({
+            data
+        });
     }
 
     /**
