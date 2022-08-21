@@ -14,17 +14,12 @@ class EmployeesRoutes extends Routes
 
     configureRoutes(): express.Application
     {
-        // this.app.use(Auth.authorize(['employee.manage', 'company.manage']));
-        this.app.use(unless(Auth.authorize(['employee.manage', 'company.manage']), "/login", "/register"));
-
         this.app.route(`/employees`)
             .get(EmployeeController.list)
             .post(
                 EmployeeMiddleware.validateRequiredemployeeBodyFields,
                 EmployeeMiddleware.validateSameEmailDoesntExist,
                 EmployeeController.create);
-
-        this.app.param(`id`, EmployeeMiddleware.extractId);
 
         this.app.route(`/employees/:id`)
             .all(EmployeeMiddleware.validateemployeeExists)
