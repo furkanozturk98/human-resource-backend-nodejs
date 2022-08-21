@@ -1,9 +1,14 @@
 {
 	"invalid_id": "Given id is invalid",
+	"record_not_found": "Record not found",
+
 	"employee_messages_body_fields": "Missing required fields email or first name",
 	"employee_messages_email_exists": "Employee email already exists",
 	"employee_messages_invalid_email": "Invalid email",
-	"employee_not_found": "Employee not found",
+
+	"company_messages_body_fields": "Missing required fields name",
+	"company_messages_email_exists": "Company name already exists",
+	"company_messages_invalid_email": "Invalid name",
 
 	"user_login_fail": "Email or password or is not correct",
 	"invalid_token": "Invalid token",
