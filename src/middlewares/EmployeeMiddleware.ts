@@ -1,11 +1,10 @@
 import * as express from 'express';
 import employeeService from '../services/EmployeeService';
 import Employee from "../interfaces/Employee";
-import {logger} from "../services/Logger";
-import App from '../app';
 import mongoose from "mongoose";
+import BaseMiddleware from "./BaseMiddleware";
 
-class EmployeesMiddleware
+class EmployeesMiddleware extends BaseMiddleware
 {
     /**
      * @param req
@@ -66,38 +65,6 @@ class EmployeesMiddleware
         } else {
             await EmployeesMiddleware.logAndSendResponse(res, 'employee_not_found')
         }
-    }
-
-    /**
-     * @param req
-     * @param res
-     * @param next
-     */
-    async extractId(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void>
-    {
-        const id = req.params.id;
-
-        if( !mongoose.Types.ObjectId.isValid(id) ) {
-            await EmployeesMiddleware.logAndSendResponse(res, 'employee_not_found')
-        }
-
-        req.body.id = id;
-        next();
-    }
-
-    /**
-     * @param res
-     * @param string
-     */
-    static async logAndSendResponse(res: express.Response, string: string): Promise<void>
-    {
-        const message = App.localeService.translate(string);
-
-        logger.info(message);
-
-        res.status(400).send({
-            error : message
-        });
     }
 }
 
