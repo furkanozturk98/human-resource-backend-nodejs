@@ -2,10 +2,11 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as dotenv        from 'dotenv';
 import Database from './config/Database';
-import EmployeesRoutes from "./routes/EmployeeRoutes";
+// import EmployeesRoutes from "./routes/EmployeeRoutes";
 import container from './services/Container';
 import {LocaleService} from "./services/LocaleService";
-import AuthRoutes from "./routes/AuthRoutes";
+// import AuthRoutes from "./routes/AuthRoutes";
+import {RouteConfigurator} from "./services/RouteConfigurator";
 
 class App
 {
@@ -28,11 +29,7 @@ class App
     private initializeRoutes() {
         this.app.use(bodyParser.json());
 
-        const authRoutes = new AuthRoutes(this.app);
-        authRoutes.configureRoutes();
-
-        const employeesRoutes = new EmployeesRoutes(this.app);
-        employeesRoutes.configureRoutes();
+        RouteConfigurator.configurate(this.app)
     }
 
 

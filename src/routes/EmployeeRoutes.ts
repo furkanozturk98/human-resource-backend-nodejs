@@ -5,8 +5,10 @@ import * as express from 'express';
 import * as Auth from '../middlewares/AuthMiddleware';
 import {unless} from "../utils/RouteUtil";
 
-class EmployeesRoutes extends Routes {
-    constructor(app: express.Application) {
+class EmployeesRoutes extends Routes
+{
+    constructor(app: express.Application)
+    {
         super(app, 'EmployeesRoutes');
     }
 
