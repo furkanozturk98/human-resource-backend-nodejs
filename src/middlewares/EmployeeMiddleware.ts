@@ -1,7 +1,6 @@
 import * as express from 'express';
 import employeeService from '../services/EmployeeService';
 import Employee from "../interfaces/Employee";
-import mongoose from "mongoose";
 import BaseMiddleware from "./BaseMiddleware";
 
 class EmployeesMiddleware extends BaseMiddleware

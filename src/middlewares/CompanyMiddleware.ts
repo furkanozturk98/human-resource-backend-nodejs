@@ -12,7 +12,7 @@ class CompanysMiddleware extends BaseMiddleware
      */
     async validateRequiredBodyFields(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void>
     {
-        if (req.body && req.body.email && req.body.firstName) {
+        if (req.body && req.body.name) {
             next();
         } else {
             await CompanysMiddleware.logAndSendResponse(res, 'company_messages_body_fields')
