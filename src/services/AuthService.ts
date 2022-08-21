@@ -3,6 +3,7 @@ import UserInterface from "../interfaces/User";
 import User from "../models/User";
 import bcrypt from "bcrypt";
 import {generateToken} from "../utils/JwtUtil";
+import App from "../app";
 
 class AuthService
 {
@@ -35,7 +36,7 @@ class AuthService
             }
         }
 
-        throw new Error('Email or password or is not correct');
+        throw new Error(App.localeService.translate("user_login_fail"));
     }
 }
 

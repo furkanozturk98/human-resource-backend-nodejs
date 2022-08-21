@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { validateToken } from '../utils/JwtUtil';
+import App from "../app";
 
 /**
  * middleware to check whether user has access to a specific endpoint
@@ -10,9 +11,10 @@ export const authorize = (allowedAccessTypes: string[]) => async (req: Request, 
     try {
         let jwt = req.headers.authorization;
 
-        // verify request has token
         if (!jwt) {
-            return res.status(401).json({ message : 'Invalid token' });
+            return res.status(401).json({
+                message : App.localeService.translate("invalid_token")
+            });
         }
 
         // remove Bearer if using Bearer Authorization mechanism
@@ -28,16 +30,22 @@ export const authorize = (allowedAccessTypes: string[]) => async (req: Request, 
         );
 
         if (!hasAccessToEndpoint) {
-            return res.status(401).json({ message : 'No enough privileges to access endpoint' });
+            return res.status(401).json({
+                message : App.localeService.translate("no_permission")
+            });
         }
 
         next();
     } catch (error) {
         if (error.name === 'TokenExpiredError') {
-            res.status(401).json({ message : 'Expired token' });
+            res.status(401).json({
+                message : App.localeService.translate("expired_token")
+            });
             return;
         }
 
-        res.status(500).json({ message : 'Failed to authenticate user' });
+        res.status(500).json({
+            message : App.localeService.translate("failed_to_authenticate")
+        });
     }
 };
