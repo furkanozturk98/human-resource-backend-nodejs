@@ -1,6 +1,5 @@
 import * as express from 'express';
-import EmployeesService from '../services/EmployeeService';
-// import * as argon2 from 'argon2';
+import EmployeeService from '../services/EmployeeService';
 
 class EmployeeController
 {
@@ -10,7 +9,7 @@ class EmployeeController
      */
     async list(req: express.Request, res: express.Response): Promise<void>
     {
-        const employees = await EmployeesService.list(15, 1);
+        const employees = await EmployeeService.list(15, 1);
 
         res.status(200).send(employees);
     }
@@ -21,7 +20,7 @@ class EmployeeController
      */
     async show(req: express.Request, res: express.Response): Promise<void>
     {
-        const employee = await EmployeesService.show(req.params.id);
+        const employee = await EmployeeService.show(req.params.id);
 
         res.status(200).send(employee);
     }
@@ -33,7 +32,7 @@ class EmployeeController
     async create(req: express.Request, res: express.Response): Promise<void>
     {
         // req.body.password = await argon2.hash(req.body.password);
-        const employee = await EmployeesService.create(req.body);
+        const employee = await EmployeeService.create(req.body);
 
         res.status(201).send(employee);
     }
@@ -44,7 +43,7 @@ class EmployeeController
      */
     async update(req: express.Request, res: express.Response): Promise<void>
     {
-        const data = await EmployeesService.update(req.params.id, req.body);
+        const data = await EmployeeService.update(req.params.id, req.body);
 
         res.status(204).send(data);
     }
@@ -55,7 +54,7 @@ class EmployeeController
      */
     async delete(req: express.Request, res: express.Response): Promise<void>
     {
-        await EmployeesService.delete(req.params.id);
+        await EmployeeService.delete(req.params.id);
 
         res.status(204).send(``);
     }
