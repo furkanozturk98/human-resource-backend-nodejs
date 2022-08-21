@@ -2,10 +2,8 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as dotenv        from 'dotenv';
 import Database from './config/Database';
-// import EmployeesRoutes from "./routes/EmployeeRoutes";
 import container from './services/Container';
 import {LocaleService} from "./services/LocaleService";
-// import AuthRoutes from "./routes/AuthRoutes";
 import {RouteConfigurator} from "./services/RouteConfigurator";
 
 class App

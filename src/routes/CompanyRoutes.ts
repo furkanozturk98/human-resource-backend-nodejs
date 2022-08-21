@@ -12,21 +12,19 @@ class CompanyRoutes extends Routes
 
     configureRoutes(): express.Application
     {
-        this.app.route(`/companys`)
+        this.app.route(`/companies`)
             .get(CompanyController.list)
             .post(
                 CompanyMiddleware.validateRequiredBodyFields,
                 CompanyMiddleware.validateSameNameDoesntExist,
                 CompanyController.create);
 
-        this.app.param(`id`, CompanyMiddleware.extractId);
-
-        this.app.route(`/companys/:id`)
+        this.app.route(`/companies/:id`)
             .all(CompanyMiddleware.validateCompanyExists)
             .get(CompanyController.show)
             .delete(CompanyController.delete);
 
-        this.app.put(`/companys/:id`,[
+        this.app.put(`/companies/:id`,[
             CompanyMiddleware.validateRequiredBodyFields,
             CompanyMiddleware.validateSameNameBelongToSameCompany,
             CompanyController.update
