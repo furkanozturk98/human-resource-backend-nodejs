@@ -7,7 +7,7 @@ const schema = new mongoose.Schema({
     lastName   : String,
     email      : String,
     phone      : String,
-    company_id : Number
+    company_id : String
 },{
     versionKey : false
 });
