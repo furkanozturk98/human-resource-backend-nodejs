@@ -34,8 +34,10 @@ class CompanyService implements CRUD
     async create(resource: CompanyInterface)
     {
         try{
-            await Company.create(resource);
+            const company = await Company.create(resource);
             logger.info("Company Created : ", resource);
+
+            return company;
         }
         catch (e) {
             logger.error("Error On Creating Company : ", {
@@ -51,8 +53,10 @@ class CompanyService implements CRUD
     async update(id: string, resource: CompanyInterface)
     {
         try {
-            await Company.findByIdAndUpdate(id, resource, {new : true});
+            const company = await Company.findByIdAndUpdate(id, resource, {new : true});
             logger.info("Company Updated : ", resource);
+
+            return company;
         }
         catch (e) {
             logger.error("Error On Updating Company : ", {

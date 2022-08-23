@@ -1,5 +1,7 @@
 import * as express from 'express';
 import CompanyService from '../services/CompanyService';
+import Company from "../interfaces/Company";
+import CompanyTransformer from "../services/Transformers/CompanyTransformer";
 
 class CompanyController
 {
@@ -9,9 +11,11 @@ class CompanyController
      */
     async list(req: express.Request, res: express.Response): Promise<void>
     {
-        const Companys = await CompanyService.list(15, 1);
+        const companies = await CompanyService.list(15, 1);
 
-        res.status(200).send(Companys);
+        res.status(200).send(
+            CompanyTransformer.transformMany(companies.data as Company[])
+        );
     }
 
     /**
@@ -20,9 +24,11 @@ class CompanyController
      */
     async show(req: express.Request, res: express.Response): Promise<void>
     {
-        const Company = await CompanyService.show(req.params.id);
+        const company = await CompanyService.show(req.params.id);
 
-        res.status(200).send(Company);
+        res.status(200).send({
+            data : CompanyTransformer.transform(company)
+        });
     }
 
     /**
@@ -31,10 +37,11 @@ class CompanyController
      */
     async create(req: express.Request, res: express.Response): Promise<void>
     {
-        // req.body.password = await argon2.hash(req.body.password);
-        const Company = await CompanyService.create(req.body);
+        const company = await CompanyService.create(req.body);
 
-        res.status(201).send(Company);
+        res.status(201).send({
+            data : CompanyTransformer.transform(company)
+        });
     }
 
     /**
@@ -43,10 +50,10 @@ class CompanyController
      */
     async update(req: express.Request, res: express.Response): Promise<void>
     {
-        const data = await CompanyService.update(req.params.id, req.body);
+        const company = await CompanyService.update(req.params.id, req.body);
 
         res.status(200).send({
-            data
+            data : CompanyTransformer.transform(company)
         });
     }
 
