@@ -28,9 +28,9 @@ class EmployeeController
     {
         const employee = await EmployeeService.show(req.params.id);
 
-        res.status(200).send(
-            EmployeeTransformer.transform(employee)
-        );
+        res.status(200).send({
+            data : EmployeeTransformer.transform(employee)
+        });
     }
 
     /**
@@ -41,9 +41,9 @@ class EmployeeController
     {
         const employee = await EmployeeService.create(req.body);
 
-        res.status(201).send(
-            EmployeeTransformer.transform(employee)
-        );
+        res.status(201).send({
+            data : EmployeeTransformer.transform(employee)
+        });
     }
 
     /**
@@ -54,9 +54,9 @@ class EmployeeController
     {
         const employee = await EmployeeService.update(req.params.id, req.body);
 
-        res.status(200).send(
-            EmployeeTransformer.transform(employee)
-        );
+        res.status(200).send({
+            data : EmployeeTransformer.transform(employee)    
+        });
     }
 
     /**
