@@ -16,8 +16,9 @@ class EmployeeService implements CRUD
             limit        : limit,
             customLabels : {
                 docs : 'data',
-            }
-        });
+            },
+            populate : 'company',
+        })
     }
 
     /**
@@ -25,7 +26,7 @@ class EmployeeService implements CRUD
      */
     async show(id: string)
     {
-        return Employee.findById(id);
+        return Employee.findById(id).populate('company');
     }
 
     /**
@@ -34,8 +35,10 @@ class EmployeeService implements CRUD
     async create(resource: EmployeeInterface)
     {
         try{
-            await Employee.create(resource);
+            const employee = await Employee.create(resource)
             logger.info("Employee Created : ", resource);
+
+            return employee.populate('company');
         }
         catch (e) {
             logger.error("Error On Creating Employee : ", {
@@ -54,7 +57,7 @@ class EmployeeService implements CRUD
             const employee = await Employee.findByIdAndUpdate(id, resource, {new : true});
             logger.info("Employee Updated : ", resource);
 
-            return employee;
+            return employee.populate('company');
         }
         catch (e) {
             logger.error("Error On Updating Employee : ", {

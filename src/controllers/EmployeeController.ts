@@ -1,5 +1,7 @@
 import * as express from 'express';
 import EmployeeService from '../services/EmployeeService';
+import EmployeeTransformer from "../services/Transformers/EmployeeTransformer";
+import Employee from "../interfaces/Employee";
 
 class EmployeeController
 {
@@ -11,7 +13,11 @@ class EmployeeController
     {
         const employees = await EmployeeService.list(15, 1);
 
-        res.status(200).send(employees);
+        console.log(employees);
+
+        res.status(200).send(
+            EmployeeTransformer.transformMany(employees.data as Employee[])
+        );
     }
 
     /**
@@ -22,7 +28,9 @@ class EmployeeController
     {
         const employee = await EmployeeService.show(req.params.id);
 
-        res.status(200).send(employee);
+        res.status(200).send(
+            EmployeeTransformer.transform(employee)
+        );
     }
 
     /**
@@ -31,10 +39,11 @@ class EmployeeController
      */
     async create(req: express.Request, res: express.Response): Promise<void>
     {
-        // req.body.password = await argon2.hash(req.body.password);
         const employee = await EmployeeService.create(req.body);
 
-        res.status(201).send(employee);
+        res.status(201).send(
+            EmployeeTransformer.transform(employee)
+        );
     }
 
     /**
@@ -43,11 +52,11 @@ class EmployeeController
      */
     async update(req: express.Request, res: express.Response): Promise<void>
     {
-        const data = await EmployeeService.update(req.params.id, req.body);
+        const employee = await EmployeeService.update(req.params.id, req.body);
 
-        res.status(200).send({
-            data
-        });
+        res.status(200).send(
+            EmployeeTransformer.transform(employee)
+        );
     }
 
     /**
