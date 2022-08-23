@@ -2,6 +2,10 @@ import * as express from 'express';
 import CompanyService from '../services/CompanyService';
 import Company from "../interfaces/Company";
 import CompanyTransformer from "../services/Transformers/CompanyTransformer";
+import {UploadedFile} from "express-fileupload";
+import { v4 as uuidv4 } from 'uuid';
+import path from "path";
+import {logger} from "../services/Logger";
 
 class CompanyController
 {
@@ -50,6 +54,29 @@ class CompanyController
      */
     async update(req: express.Request, res: express.Response): Promise<void>
     {
+        if (req.files && Object.keys(req.files).length > 0) {
+
+            const file = req.files.file as UploadedFile;
+
+            const extension = file?.mimetype.replace('image/', '.')
+
+            const fileName = uuidv4() + extension;
+
+            const filePath = path.join(__dirname, "../../", "/static/" + fileName)
+
+            file.mv(filePath, function (err) {
+                if (err){
+                    logger.error("Error On Uploading File : ", {
+                        error : err
+                    });
+
+                    res.status(400).send(err);
+                }
+            })
+
+            req.body.logo = fileName;
+        }
+
         const company = await CompanyService.update(req.params.id, req.body);
 
         res.status(200).send({

@@ -1,4 +1,5 @@
 import * as express from 'express';
+import expressFileUpload from 'express-fileupload';
 import * as bodyParser from 'body-parser';
 import * as dotenv        from 'dotenv';
 import Database from './config/Database';
@@ -26,6 +27,7 @@ class App
 
     private initializeRoutes() {
         this.app.use(bodyParser.json());
+        this.app.use(expressFileUpload());
 
         RouteConfigurator.configurate(this.app)
     }

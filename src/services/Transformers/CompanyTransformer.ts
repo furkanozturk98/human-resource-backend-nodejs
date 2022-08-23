@@ -1,4 +1,3 @@
-import Employee from "../../interfaces/Company";
 import Company from "../../interfaces/Company";
 
 export default class CompanyTransformer
