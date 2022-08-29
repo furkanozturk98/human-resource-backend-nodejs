@@ -10,7 +10,7 @@
 	"company_messages_email_exists": "Company name already exists",
 	"company_messages_invalid_email": "Invalid name",
 
-	"user_login_fail": "Email or password or is not correct",
+	"user_login_fail": "These credentials do not match our records.",
 	"invalid_token": "Invalid token",
 	"no_permission": "No enough privileges to access endpoint",
 	"expired_token": "Expired token",
