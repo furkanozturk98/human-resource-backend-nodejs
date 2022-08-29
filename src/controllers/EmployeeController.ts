@@ -15,9 +15,9 @@ class EmployeeController
 
         console.log(employees);
 
-        res.status(200).send(
-            EmployeeTransformer.transformMany(employees.data as Employee[])
-        );
+        res.status(200).send({
+            data : EmployeeTransformer.transformMany(employees.data as Employee[])
+        });
     }
 
     /**
