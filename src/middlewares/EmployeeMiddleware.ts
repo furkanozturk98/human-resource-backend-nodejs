@@ -12,10 +12,28 @@ class EmployeesMiddleware extends BaseMiddleware
      */
     async validateRequiredemployeeBodyFields(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void>
     {
-        if (req.body && req.body.email && req.body.firstName) {
+        if(req.body && req.body.email && req.body.first_name && req.body.last_name) {
             next();
-        } else {
-            await EmployeesMiddleware.logAndSendResponse(res, 'employee_messages_body_fields')
+        }
+        else {
+            const response = {
+                message : 'The given data was invalid.',
+                errors  : {}
+            };
+
+            if (!req.body.first_name) {
+                response.errors['first_name'] = ['The first name field is required.']
+            }
+
+            if (!req.body.email) {
+                response.errors['email'] = ['The email field is required.']
+            }
+
+            if (!req.body.email) {
+                response.errors['last_name'] = ['The last name field is required.']
+            }
+
+            res.status(422).send(response);
         }
     }
 
