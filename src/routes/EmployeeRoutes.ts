@@ -14,19 +14,19 @@ class EmployeesRoutes extends Routes
 
     configureRoutes(): express.Application
     {
-        this.app.route(`/employees`)
+        this.app.route(`/api/employees`)
             .get(EmployeeController.list)
             .post(
                 EmployeeMiddleware.validateRequiredemployeeBodyFields,
                 EmployeeMiddleware.validateSameEmailDoesntExist,
                 EmployeeController.create);
 
-        this.app.route(`/employees/:id`)
+        this.app.route(`/api/employees/:id`)
             .all(EmployeeMiddleware.validateemployeeExists)
             .get(EmployeeController.show)
             .delete(EmployeeController.delete);
 
-        this.app.put(`/employees/:id`,[
+        this.app.put(`/api/employees/:id`,[
             EmployeeMiddleware.validateRequiredemployeeBodyFields,
             EmployeeMiddleware.validateSameEmailBelongToSameemployee,
             EmployeeController.update

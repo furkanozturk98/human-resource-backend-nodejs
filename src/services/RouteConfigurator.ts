@@ -1,6 +1,7 @@
 import AuthRoutes from "../routes/AuthRoutes";
 import EmployeesRoutes from "../routes/EmployeeRoutes";
 import CompanyRoutes from "../routes/CompanyRoutes";
+import UserProfileRoutes from "../routes/UserProfileRoutes";
 import * as express from "express";
 import {unless} from "../utils/RouteUtil";
 import * as Auth from "../middlewares/AuthMiddleware";
@@ -12,7 +13,7 @@ export class RouteConfigurator
     {
         const routes = await RouteConfigurator.getRoutes();
 
-        app.use(unless(Auth.authorize(['employee.manage', 'company.manage']), "/login", "/register"));
+        app.use(unless(Auth.authorize(['employee.manage', 'company.manage']), "/api/login", "/api/register"));
         app.param(`id`, EmployeeMiddleware.extractId);
 
         Object.keys(routes).forEach(function (key) {
@@ -26,7 +27,8 @@ export class RouteConfigurator
         return {
             AuthRoutes,
             EmployeesRoutes,
-            CompanyRoutes
+            CompanyRoutes,
+            UserProfileRoutes
         }
     }
 }
