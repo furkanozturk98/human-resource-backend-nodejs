@@ -9,9 +9,9 @@ class EmployeeController
      * @param req
      * @param res
      */
-    async list(req: express.Request, res: express.Response): Promise<void>
+    async all(req: express.Request, res: express.Response): Promise<void>
     {
-        const employees = await EmployeeService.list(15, 1);
+        const employees = await EmployeeService.getPaginatedData(15, 1);
 
         console.log(employees);
 

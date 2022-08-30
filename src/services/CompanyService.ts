@@ -9,11 +9,20 @@ class CompanyService implements CRUD
      * @param limit
      * @param page
      */
-    async list(limit: number, page: number)
+    async getPaginatedData(limit: number, page: number)
     {
         return await Company.paginate({}, {
             page         : page,
             limit        : limit,
+            customLabels : {
+                docs : 'data',
+            }
+        });
+    }
+
+    async list()
+    {
+        return await Company.paginate({}, {
             customLabels : {
                 docs : 'data',
             }

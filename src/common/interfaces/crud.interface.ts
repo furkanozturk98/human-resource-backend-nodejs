@@ -1,5 +1,5 @@
 export interface CRUD {
-    list: (limit: number, page: number) => Promise<any>,
+    getPaginatedData: (limit: number, page: number) => Promise<any>,
     create: (resource: any) => Promise<any>,
     update: (id: any, resource: any) => Promise<any>,
     show: (id: any) => Promise<any>,

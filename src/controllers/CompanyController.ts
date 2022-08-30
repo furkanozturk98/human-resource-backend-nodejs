@@ -13,9 +13,9 @@ class CompanyController
      * @param req
      * @param res
      */
-    async list(req: express.Request, res: express.Response): Promise<void>
+    async all(req: express.Request, res: express.Response): Promise<void>
     {
-        const companies = await CompanyService.list(15, 1);
+        const companies = await CompanyService.getPaginatedData(15, 1);
 
         res.status(200).send(
             CompanyTransformer.transformMany(companies.data as Company[])
@@ -32,6 +32,21 @@ class CompanyController
 
         res.status(200).send({
             data : CompanyTransformer.transform(company)
+        });
+    }
+
+    /**
+     * @param req
+     * @param res
+     */
+    async list(req: express.Request, res: express.Response): Promise<void>
+    {
+        const companies = await CompanyService.list();
+
+        console.log(companies);
+
+        res.status(200).send({
+            data : CompanyTransformer.transformList(companies.data as Company[])
         });
     }
 

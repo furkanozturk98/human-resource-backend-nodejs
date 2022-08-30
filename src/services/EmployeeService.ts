@@ -9,7 +9,7 @@ class EmployeeService implements CRUD
      * @param limit
      * @param page
      */
-    async list(limit: number, page: number)
+    async getPaginatedData(limit: number, page: number)
     {
         return await Employee.paginate({}, {
             page         : page,
