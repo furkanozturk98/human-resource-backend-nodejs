@@ -24,5 +24,18 @@ export default class CompanyTransformer
 
         return items;
     }
+    
+    static transformList(resources: Company[]){
+        const items = [];
+
+        resources.forEach(function (resource) {
+            items.push({
+                text  : resource.name,
+                value : resource.id
+            })
+        })
+
+        return items;
+    }
 
 }
