@@ -12,7 +12,7 @@ class EmployeesMiddleware extends BaseMiddleware
      */
     async validateRequiredemployeeBodyFields(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void>
     {
-        if(req.body && req.body.email && req.body.first_name && req.body.last_name) {
+        if(req.body && req.body.email && req.body.first_name && req.body.last_name && req.body.company) {
             next();
         }
         else {
@@ -29,9 +29,34 @@ class EmployeesMiddleware extends BaseMiddleware
                 response.errors['email'] = ['The email field is required.']
             }
 
-            if (!req.body.email) {
+            if (!req.body.last_name) {
                 response.errors['last_name'] = ['The last name field is required.']
             }
+
+            if (!req.body.company) {
+                response.errors['company'] = ['The company field is required.']
+            }
+
+            res.status(422).send(response);
+        }
+    }
+
+    async validateEmail(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void>
+    {
+        const regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+
+        const isValid = regexp.test(req.body.email);
+
+        if(isValid) {
+            next();
+        }
+        else {
+            const response = {
+                message : 'The given data was invalid.',
+                errors  : {}
+            };
+
+            response.errors['email'] = ['The email field is not valid.']
 
             res.status(422).send(response);
         }
@@ -47,7 +72,14 @@ class EmployeesMiddleware extends BaseMiddleware
         const employee = await employeeService.getEmployeeByEmail(req.body.email);
 
         if (employee) {
-            await EmployeesMiddleware.logAndSendResponse(res, 'employee_messages_email_exists')
+            const response = {
+                message : 'The given data was invalid.',
+                errors  : {}
+            };
+
+            response.errors['email'] = ['The email is exists.']
+
+            res.status(422).send(response);
         } else {
             next();
         }

@@ -2,8 +2,6 @@ import {Routes} from '../common/Routes';
 import EmployeeController from '../controllers/EmployeeController';
 import EmployeeMiddleware from '../middlewares/EmployeeMiddleware';
 import * as express from 'express';
-import * as Auth from '../middlewares/AuthMiddleware';
-import {unless} from "../utils/RouteUtil";
 
 class EmployeesRoutes extends Routes
 {
@@ -15,11 +13,13 @@ class EmployeesRoutes extends Routes
     configureRoutes(): express.Application
     {
         this.app.route(`/api/employees`)
-            .get(EmployeeController.list)
+            .get(EmployeeController.all)
             .post(
                 EmployeeMiddleware.validateRequiredemployeeBodyFields,
+                EmployeeMiddleware.validateEmail,
                 EmployeeMiddleware.validateSameEmailDoesntExist,
-                EmployeeController.create);
+                EmployeeController.create
+            );
 
         this.app.route(`/api/employees/:id`)
             .all(EmployeeMiddleware.validateemployeeExists)
@@ -28,6 +28,7 @@ class EmployeesRoutes extends Routes
 
         this.app.put(`/api/employees/:id`,[
             EmployeeMiddleware.validateRequiredemployeeBodyFields,
+            EmployeeMiddleware.validateEmail,
             EmployeeMiddleware.validateSameEmailBelongToSameemployee,
             EmployeeController.update
         ]);
