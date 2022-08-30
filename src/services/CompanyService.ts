@@ -2,6 +2,10 @@ import {CRUD} from "../common/interfaces/crud.interface";
 import CompanyInterface from "../interfaces/Company";
 import Company from "../models/Company";
 import {logger} from "./Logger";
+import {UploadedFile} from "express-fileupload";
+import path from "path";
+import * as express from "express";
+import { v4 as uuidv4 } from 'uuid';
 
 class CompanyService implements CRUD
 {
@@ -99,6 +103,31 @@ class CompanyService implements CRUD
         await query.clone();
 
         return query;
+    }
+
+    async uploadLogo(req: express.Request, res: express.Response){
+        if (req.files && Object.keys(req.files).length > 0) {
+
+            const file = req.files.logo as UploadedFile;
+
+            const extension = file?.mimetype.replace('image/', '.')
+
+            const fileName = uuidv4() + extension;
+
+            const filePath = path.join(__dirname, "../../", "/static/" + fileName)
+
+            file.mv(filePath, function (err) {
+                if (err){
+                    logger.error("Error On Uploading File : ", {
+                        error : err
+                    });
+
+                    res.status(400).send(err);
+                }
+            })
+
+            req.body.logo = fileName;
+        }
     }
 }
 

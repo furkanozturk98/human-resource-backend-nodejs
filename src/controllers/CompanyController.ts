@@ -17,9 +17,9 @@ class CompanyController
     {
         const companies = await CompanyService.getPaginatedData(15, 1);
 
-        res.status(200).send(
-            CompanyTransformer.transformMany(companies.data as Company[])
-        );
+        res.status(200).send({
+            data : CompanyTransformer.transformMany(companies.data as Company[])
+        });
     }
 
     /**
@@ -56,6 +56,8 @@ class CompanyController
      */
     async create(req: express.Request, res: express.Response): Promise<void>
     {
+        await CompanyService.uploadLogo(req, res);
+
         const company = await CompanyService.create(req.body);
 
         res.status(201).send({
@@ -69,28 +71,7 @@ class CompanyController
      */
     async update(req: express.Request, res: express.Response): Promise<void>
     {
-        if (req.files && Object.keys(req.files).length > 0) {
-
-            const file = req.files.file as UploadedFile;
-
-            const extension = file?.mimetype.replace('image/', '.')
-
-            const fileName = uuidv4() + extension;
-
-            const filePath = path.join(__dirname, "../../", "/static/" + fileName)
-
-            file.mv(filePath, function (err) {
-                if (err){
-                    logger.error("Error On Uploading File : ", {
-                        error : err
-                    });
-
-                    res.status(400).send(err);
-                }
-            })
-
-            req.body.logo = fileName;
-        }
+        await CompanyService.uploadLogo(req, res);
 
         const company = await CompanyService.update(req.params.id, req.body);
 
