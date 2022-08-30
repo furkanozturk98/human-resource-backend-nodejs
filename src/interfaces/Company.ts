@@ -7,6 +7,7 @@ interface Company extends Document
     phone?: string;
     email?: string;
     logo?: string,
+    address?: string
     website?: string
 }
 

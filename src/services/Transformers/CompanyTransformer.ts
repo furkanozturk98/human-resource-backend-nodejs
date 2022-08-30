@@ -9,6 +9,7 @@ export default class CompanyTransformer
             name    : resource.name || '',
             phone   : resource.phone || '',
             email   : resource.email || '',
+            address : resource.address || '',
             logo    : resource.logo,
             website : resource.website,
         }
