@@ -2,6 +2,7 @@ import {Routes} from '../common/Routes';
 import CompanyController from '../controllers/CompanyController';
 import CompanyMiddleware from '../middlewares/CompanyMiddleware';
 import * as express from 'express';
+import EmployeeMiddleware from "../middlewares/EmployeeMiddleware";
 
 class CompanyRoutes extends Routes
 {
@@ -16,6 +17,8 @@ class CompanyRoutes extends Routes
             .get(CompanyController.all)
             .post(
                 CompanyMiddleware.validateRequiredBodyFields,
+                CompanyMiddleware.validateEmail,
+                CompanyMiddleware.validateWebsite,
                 CompanyMiddleware.validateSameNameDoesntExist,
                 CompanyController.create);
 
@@ -28,8 +31,9 @@ class CompanyRoutes extends Routes
             .delete(CompanyController.delete);
 
         this.app.post(`/api/companies/:id`,[
-            // CompanyMiddleware.validateRequiredBodyFields,
-            // CompanyMiddleware.validateSameNameBelongToSameCompany,
+            CompanyMiddleware.validateEmail,
+            CompanyMiddleware.validateWebsite,
+            CompanyMiddleware.validateSameNameBelongToSameCompany,
             CompanyController.update
         ]);
 
