@@ -38,6 +38,27 @@ class BaseMiddleware
             error : message
         });
     }
+
+    async validateEmail(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void>
+    {
+        const regexp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+
+        const isValid = regexp.test(req.body.email);
+
+        if(isValid) {
+            next();
+        }
+        else {
+            const response = {
+                message : 'The given data was invalid.',
+                errors  : {}
+            };
+
+            response.errors['email'] = ['The email field is not valid.']
+
+            res.status(422).send(response);
+        }
+    }
 }
 
 export default BaseMiddleware;
