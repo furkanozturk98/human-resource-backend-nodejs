@@ -3,11 +3,11 @@ import paginate from 'mongoose-paginate-v2';
 import Employee from "../interfaces/Employee";
 
 const schema = new mongoose.Schema({
-    firstName : String,
-    lastName  : String,
-    email     : String,
-    phone     : String,
-    company   : {
+    first_name : String,
+    last_name  : String,
+    email      : String,
+    phone      : String,
+    company    : {
         type : mongoose.Schema.Types.ObjectId,
         ref  : 'Company'
     }
